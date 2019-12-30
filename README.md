@@ -1,2 +1,2 @@
 # mandelbrot-set
-test
+Testing out Git for the first time!
