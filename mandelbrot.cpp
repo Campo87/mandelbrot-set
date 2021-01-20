@@ -1,38 +1,40 @@
-#include <iostream>
+#include <stdio.h>
 #include <math.h>
+#define MAX_ITERATION 256
 
+// Check if complex number is in the mandelbrot set.
 // z & c are complex numbers
 // z(n+1) = z(n) + c
 // z(0) = 0+0i
-bool mandelbrot_check(float c_real, float c_imag, int iterate_max)
+bool mandelbrot_check(float c_real, float c_imag)
 {
     float z_real = 0;
     float z_imag = 0;
     // (a+bi)^2 = (a+bi)(a+bi) = a^2+2abi+b^2(-1)
-    for(int i = 0; i < iterate_max; i++)
+    for(int i = 0; i < MAX_ITERATION; i++)
     {
-        z_real = pow(z_real, 2) + pow(z_imag, 2)*(-1) + c_real;
-        z_imag = 2*z_real*z_imag + z_imag;
+        z_real = pow(z_real, 2) - pow(z_imag, 2) + c_real;
+        z_imag = 2*z_real*z_imag + c_imag;
     }
-    return sqrt( pow(z_real, 2) + pow(z_imag, 2) ) < 100 ? true : false;
+    float dist = sqrt( pow(z_real, 2) + pow(z_imag, 2));
+    return (dist < 2) ? true : false;
 }
 
 int main(){
-    float a;
-    float b;
 
-    bool check = mandelbrot_check(a, b, 1000);
-    for(float i = -2; i <= 2; i = i + 0.02)
+    // This prints a window containing the mandelbrot set. It
+    // currently looks stupid, but you can make out some of 
+    // the notable features. Check output.txt
+    for(float i = 1.5; i >= -1.5; i -= 0.01)
     {
-        for(float j=-2; j<=2; j = j + 0.02)
+        for(float r = -1.5; r <= 1; r += 0.01)
         {
-            if((mandelbrot_check(j, i, 1000) == 1))
-                std::cout << "@";
+            if((mandelbrot_check(r, i) == true))
+                printf("*");
             else
-                std::cout << " ";
+                printf(" ");
         }
-        std::cout << std::endl;
+        printf("\n");
     }
-
     return 0;
 }
